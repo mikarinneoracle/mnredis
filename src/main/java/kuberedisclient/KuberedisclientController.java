@@ -27,7 +27,9 @@ public class KuberedisclientController {
         try  {
             StatefulRedisConnection<String, String> connection = redisClient.connect();
             RedisCommands<String, String> syncCommands = connection.sync();
-            return "'Status': 'ok'";
+            syncCommands.set("key", "Hello, World!");
+            String value = syncCommands.get("key");
+            return "'Value': value";
         } catch (Exception e) {
             return "'Error': '" + e.toString() + "'";
         }
