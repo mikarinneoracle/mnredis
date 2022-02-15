@@ -1,7 +1,7 @@
 micronaut:
   application:
     name: kuberedisclient
-redis.uri: redis://localhost
+redis.uri: redis://CBHvF9kfgd@141.144.204.77:8090
 netty:
   default:
     allocator:
