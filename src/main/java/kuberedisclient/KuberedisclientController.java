@@ -1,6 +1,8 @@
 package kuberedisclient;
 
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.api.StatefulRedisConnection;
+import io.lettuce.core.api.sync.RedisCommands;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -22,8 +24,13 @@ public class KuberedisclientController {
 
     @Get("/test")
     String test() {
-        redisClient.connect();
-        return "ok";
+        try  {
+            StatefulRedisConnection<String, String> connection = redisClient.connect();
+            RedisCommands<String, String> syncCommands = connection.sync();
+            return "'Status': 'ok'";
+        } catch (Exception e) {
+            return "'Error': '" + e.toString() + "'";
+        }
     }
 }
 
