@@ -51,9 +51,9 @@ micronaut {
 }
 
 dockerBuild {
-    images = ["fra.ocir.io/frsxwtjslf35/oracleidentitycloudservice/mika.rinne@oracle.com/$project.name:$project.version"]
+    images = ["fra.ocir.io/frsxwtjslf35/$project.name:$project.version"]
 }
 
 dockerBuildNative {
-    images = ["fra.ocir.io/frsxwtjslf35/oracleidentitycloudservice/mika.rinne@oracle.com/$project.name-native:$project.version"]
+    images = ["fra.ocir.io/frsxwtjslf35/$project.name-native:$project.version"]
 }
