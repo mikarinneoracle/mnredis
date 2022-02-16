@@ -7,9 +7,9 @@ plugins {
 version = "0.1"
 group = "kuberedisclient"
 
-docker {
-    url = 'http://localhost:2736'
-}
+//docker {
+//    url = 'tcp://localhost:42831'
+//}
 
 repositories {
     mavenCentral()
