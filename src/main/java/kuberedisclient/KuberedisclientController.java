@@ -29,6 +29,7 @@ public class KuberedisclientController {
             RedisCommands<String, String> syncCommands = connection.sync();
             syncCommands.set("key", "Hello, World!");
             String value = syncCommands.get("key");
+            System.out.println(value);
             return "Value: "  + value;
         } catch (Exception e) {
             return "Error: " + e.toString() + "";
