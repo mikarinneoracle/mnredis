@@ -3,6 +3,9 @@ package kuberedisclient;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
+import io.lettuce.core.cluster.RedisClusterClient;
+import io.lettuce.core.cluster.api.StatefulRedisClusterConnection;
+import io.lettuce.core.cluster.api.sync.RedisAdvancedClusterCommands;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -20,15 +23,15 @@ import jakarta.inject.Inject;
 public class KuberedisclientController {
 
     @Inject
-    RedisClient redisClient;
+    RedisClusterClient redisClusterClient;
 
     @Get("/test")
     String test() {
         try  {
-            StatefulRedisConnection<String, String> connection = redisClient.connect();
-            RedisCommands<String, String> syncCommands = connection.sync();
-            syncCommands.set("key", "Hello, World!");
-            String value = syncCommands.get("key");
+            StatefulRedisClusterConnection<String, String> connection = redisClusterClient.connect();
+            RedisAdvancedClusterCommands<String, String> sync = connection.sync();
+            sync.set("key", "Hello, World!");
+            String value = sync.get("key");
             System.out.println(value);
             return "Value: "  + value;
         } catch (Exception e) {
