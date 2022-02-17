@@ -23,14 +23,18 @@ import jakarta.inject.Inject;
 public class KuberedisclientController {
 
     @Inject
-    RedisClusterClient redisClusterClient;
+    RedisClient redisClient;
+
+    //RedisClusterClient redisClusterClient;
     RedisAdvancedClusterCommands<String, String> sync;
 
     public KuberedisclientController() {
         try  {
             System.out.println("Connecting to redis cluster ..");
-            StatefulRedisClusterConnection<String, String> connection = redisClusterClient.connect();
-            RedisAdvancedClusterCommands<String, String> sync = connection.sync();
+            //StatefulRedisClusterConnection<String, String> connection = redisClusterClient.connect();
+            //RedisAdvancedClusterCommands<String, String> sync = connection.sync();
+            StatefulRedisConnection<String, String> connection = redisClient.connect();
+            RedisCommands<String, String> sync = connection.sync();
             System.out.println("Succesfully connected.");
         } catch (Exception e) {
             System.out.println(e.toString());
