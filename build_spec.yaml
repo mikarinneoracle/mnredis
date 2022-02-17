@@ -1,0 +1,9 @@
+version: 0.1             
+component: build
+timeoutInSeconds: 5000
+shell: bash
+env:
+steps:
+  - type: Command
+    command: |
+      ./gradlew dockerBuild
