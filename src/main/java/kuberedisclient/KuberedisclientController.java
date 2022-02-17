@@ -26,7 +26,8 @@ public class KuberedisclientController {
     RedisClient redisClient;
 
     //RedisClusterClient redisClusterClient;
-    RedisAdvancedClusterCommands<String, String> sync;
+    //RedisAdvancedClusterCommands<String, String> sync;
+    RedisCommands sync;
 
     public KuberedisclientController() {
         try  {
@@ -34,9 +35,10 @@ public class KuberedisclientController {
             //StatefulRedisClusterConnection<String, String> connection = redisClusterClient.connect();
             //RedisAdvancedClusterCommands<String, String> sync = connection.sync();
             StatefulRedisConnection<String, String> connection = redisClient.connect();
-            RedisCommands<String, String> sync = connection.sync();
+            sync = connection.sync();
             System.out.println("Succesfully connected.");
         } catch (Exception e) {
+            System.out.println("Failed.");
             System.out.println(e.toString());
         }
     }
@@ -45,12 +47,12 @@ public class KuberedisclientController {
     String test() {
         try  {
             sync.set("key", "Hello, World!");
-            String value = sync.get("key");
+            String value = (String) sync.get("key");
             System.out.println(value);
-            return "{ 'value': '" + value + "'}";
+            return "{ \"value\": \"" + value + "\"}";
         } catch (Exception e) {
-            System.out.println(e.toString());
-            return "{ 'error': '" + e.toString() + "'}";
+            System.out.println("Test error:" + e.toString());
+            return "{ \"Test error\": \"" + e.toString() + "\" }";
         }
     }
 }
