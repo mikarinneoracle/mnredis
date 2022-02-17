@@ -27,6 +27,8 @@ public class KuberedisclientController {
 
     //RedisClusterClient redisClusterClient;
     //RedisAdvancedClusterCommands<String, String> sync;
+
+    /*
     RedisCommands sync;
 
     public KuberedisclientController() {
@@ -42,10 +44,13 @@ public class KuberedisclientController {
             System.out.println(e.toString());
         }
     }
+     */
 
     @Get("/test")
     String test() {
         try  {
+            StatefulRedisConnection<String, String> connection = redisClient.connect();
+            RedisCommands sync = connection.sync();
             sync.set("key", "Hello, World!");
             String value = (String) sync.get("key");
             System.out.println(value);
