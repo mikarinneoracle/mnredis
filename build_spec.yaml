@@ -6,4 +6,4 @@ env:
 steps:
   - type: Command
     command: |
-      ./gradlew dockerBuild
+      sudo ./gradlew dockerBuild
