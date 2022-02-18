@@ -15,7 +15,7 @@ steps:
       echo "Timestamp: $timestamp"
   - type: Command
     command: |
-      cd cd build/docker/main
+      cd build/docker/main
       docker build .
       image=$(docker images | grep kuberedisclient | awk -F ' ' '{print $3}')
       docker tag $image efra.ocir.io/frsxwtjslf35/kuberedisclient:$buildId
