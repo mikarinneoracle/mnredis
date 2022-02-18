@@ -8,5 +8,17 @@ env:
 steps:
   - type: Command
     command: |
-      chmod +x ./gradlew
-      ./gradlew dockerBuild
+      buildId=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-6 | rev`
+      echo "Build ID: $buildId"
+  - type: Command
+    command: |
+      cd build/docker/main
+      docker build -t fra.ocir.io/frsxwtjslf35/kuberedisclient:latest .
+      docker tag fra.ocir.io/frsxwtjslf35/kuberedisclient:latest efra.ocir.io/frsxwtjslf35/kuberedisclient:$buildId
+outputArtifacts:
+  - name: kuberedisclient
+    type: DOCKER_IMAGE
+    location: fra.ocir.io/frsxwtjslf35/kuberedisclient:latest
+  - name: kuberedisclient-specific
+    type: DOCKER_IMAGE
+    location: fra.ocir.io/frsxwtjslf35/kuberedisclient
