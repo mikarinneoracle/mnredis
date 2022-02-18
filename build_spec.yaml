@@ -3,7 +3,27 @@ component: build
 timeoutInSeconds: 5000
 shell: bash
 env:
+  exportedVariables:
+    - buildId
+    - timestamp
 steps:
   - type: Command
     command: |
-      sudo ./gradlew dockerBuild
+      buildId=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-6 | rev`
+      echo "Build ID: $buildId"
+      timestamp=`date +%s`
+      echo "Timestamp: $timestamp"
+  - type: Command
+    command: |
+      cd cd build/docker/main
+      docker build .
+      image=$(docker images | grep kuberedisclient | awk -F ' ' '{print $3}')
+      docker tag $image efra.ocir.io/frsxwtjslf35/kuberedisclient:$buildId
+      docker tag $image fra.ocir.io/frsxwtjslf35/kuberedisclient:latest
+outputArtifacts:
+  - name: kuberedisclient
+    type: DOCKER_IMAGE
+    location: fra.ocir.io/frsxwtjslf35/kuberedisclient:latest
+  - name: kuberedisclient-specific
+    type: DOCKER_IMAGE
+    location: fra.ocir.io/frsxwtjslf35/kuberedisclient
