@@ -7,10 +7,6 @@ plugins {
 version = "0.5"
 group = "kuberedisclient"
 
-//docker {
-//    url = 'tcp://localhost:42831'
-//}
-
 repositories {
     mavenCentral()
 }
@@ -32,8 +28,8 @@ application {
     mainClass.set("kuberedisclient.Application")
 }
 java {
-    sourceCompatibility = JavaVersion.toVersion("11")
-    targetCompatibility = JavaVersion.toVersion("11")
+    sourceCompatibility = JavaVersion.toVersion("8")
+    targetCompatibility = JavaVersion.toVersion("8")
 }
 
 tasks {
