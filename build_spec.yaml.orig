@@ -1,4 +1,4 @@
-version: 0.1
+version: 0.1             
 component: build
 timeoutInSeconds: 5000
 shell: bash
@@ -10,10 +10,6 @@ steps:
     command: |
       buildId=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-6 | rev`
       echo "Build ID: $buildId"
-  - type: Command
-    command: |
-      chmod +x ./gradlew
-      ./gradlew dockerBuild
   - type: Command
     command: |
       cd build/docker/main
