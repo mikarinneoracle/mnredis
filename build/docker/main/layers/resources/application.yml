@@ -1,0 +1,8 @@
+micronaut:
+  application:
+    name: kuberedisclient
+redis.uri: redis://CBHvF9kfgd@10.96.151.109:6379
+netty:
+  default:
+    allocator:
+      max-order: 3
