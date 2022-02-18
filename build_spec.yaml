@@ -5,21 +5,16 @@ shell: bash
 env:
   exportedVariables:
     - buildId
-    - timestamp
 steps:
   - type: Command
     command: |
       buildId=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-6 | rev`
       echo "Build ID: $buildId"
-      timestamp=`date +%s`
-      echo "Timestamp: $timestamp"
   - type: Command
     command: |
       cd build/docker/main
-      docker build .
-      image=$(docker images | grep kuberedisclient | awk -F ' ' '{print $3}')
-      docker tag $image efra.ocir.io/frsxwtjslf35/kuberedisclient:$buildId
-      docker tag $image fra.ocir.io/frsxwtjslf35/kuberedisclient:latest
+      docker build -t fra.ocir.io/frsxwtjslf35/kuberedisclient:latest .
+      docker tag fra.ocir.io/frsxwtjslf35/kuberedisclient:latest efra.ocir.io/frsxwtjslf35/kuberedisclient:$buildId
 outputArtifacts:
   - name: kuberedisclient
     type: DOCKER_IMAGE
