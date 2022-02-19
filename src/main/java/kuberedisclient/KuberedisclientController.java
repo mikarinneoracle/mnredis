@@ -29,12 +29,25 @@ public class KuberedisclientController {
     @Get("/test")
     String test() {
         if(connection == null) {
-            try {
-                System.out.println("Connecting to redis cluster ..");
-                connection = redisClient.connect();
-            } catch (Exception e) {
-                System.out.println("Test error:" + e.toString());
-                return "{ \"Test error\": \"" + e.toString() + "\" }";
+            System.out.println("Connecting to redis cluster ..");
+            int i=0;
+            while ( i < 5 && connection == null)
+            {
+                if(i > 0)
+                {
+                    System.out.println("Retrying ...");
+                }
+                try {
+                    connection = redisClient.connect();
+                } catch (Exception e) {
+                    System.out.println("Failed. Error:" + e.toString());
+                    connection = null;
+                }
+                i++;
+            }
+            if(connection == null)
+            {
+                return "{ \"Test error\": \"Could not connect to Redis\" }";
             }
         }
         if(connection != null) {
@@ -46,7 +59,7 @@ public class KuberedisclientController {
                 System.out.println(value);
                 return "{ \"value\": \"" + value + "\"}";
             } catch (Exception e) {
-                System.out.println("Failed.");
+                connection = null;
                 return "{ \"Test error\": \"" + e.toString() + "\" }";
             }
         }
