@@ -41,6 +41,8 @@ public class KuberedisclientController {
                 try {
                     connection = redisClient.connect();
                     sync = connection.sync();
+                    // Test call making sure this works now
+                    sync.set("key", "Hello, World!");
                 } catch (Exception e) {
                     System.out.println("Failed. Error:" + e.toString());
                     connection = null;
