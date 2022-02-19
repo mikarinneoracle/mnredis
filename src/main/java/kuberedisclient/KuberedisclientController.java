@@ -32,7 +32,7 @@ public class KuberedisclientController {
         if(connection == null || sync == null) {
             System.out.println("Connecting to redis cluster ..");
             int i=0;
-            while ( i < 5 && connection == null && sync == null)
+            while ( i < 100 && (connection == null || sync == null))
             {
                 if(i > 0)
                 {
