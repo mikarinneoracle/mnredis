@@ -25,13 +25,14 @@ public class KuberedisclientController {
     @Inject
     RedisClient redisClient;
     StatefulRedisConnection<String, String> connection;
+    RedisCommands sync;
 
     @Get("/test")
     String test() {
-        if(connection == null) {
+        if(connection == null || sync == null) {
             System.out.println("Connecting to redis cluster ..");
             int i=0;
-            while ( i < 5 && connection == null)
+            while ( i < 5 && connection == null && sync == null)
             {
                 if(i > 0)
                 {
@@ -39,27 +40,30 @@ public class KuberedisclientController {
                 }
                 try {
                     connection = redisClient.connect();
+                    sync = connection.sync();
                 } catch (Exception e) {
                     System.out.println("Failed. Error:" + e.toString());
                     connection = null;
+                    sync = null;
                 }
                 i++;
             }
-            if(connection == null)
+            if(connection == null || sync == null)
             {
                 return "{ \"Test error\": \"Could not connect to Redis\" }";
+            } else {
+                System.out.println("Connected.");
             }
         }
-        if(connection != null) {
+        if(connection != null && sync != null) {
             try {
-
-                RedisCommands sync = connection.sync();
                 sync.set("key", "Hello, World!");
                 String value = (String) sync.get("key");
                 System.out.println(value);
                 return "{ \"value\": \"" + value + "\"}";
             } catch (Exception e) {
                 connection = null;
+                sync = null;
                 return "{ \"Test error\": \"" + e.toString() + "\" }";
             }
         }
