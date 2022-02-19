@@ -26,33 +26,31 @@ public class KuberedisclientController {
     RedisClient redisClient;
     StatefulRedisConnection<String, String> connection;
 
-    public KuberedisclientController() {
-        try  {
-            System.out.println("Connecting to redis cluster ..");
-            connection = redisClient.connect();
-            System.out.println("Succesfully connected.");
-        } catch (Exception e) {
-            System.out.println("Failed.");
-            System.out.println(e.toString());
-        }
-    }
-
     @Get("/test")
     String test() {
+        if(connection == null) {
+            try {
+                System.out.println("Connecting to redis cluster ..");
+                connection = redisClient.connect();
+            } catch (Exception e) {
+                System.out.println("Test error:" + e.toString());
+                return "{ \"Test error\": \"" + e.toString() + "\" }";
+            }
+        }
         if(connection != null) {
             try {
+
                 RedisCommands sync = connection.sync();
                 sync.set("key", "Hello, World!");
                 String value = (String) sync.get("key");
                 System.out.println(value);
                 return "{ \"value\": \"" + value + "\"}";
             } catch (Exception e) {
-                System.out.println("Test error:" + e.toString());
+                System.out.println("Failed.");
                 return "{ \"Test error\": \"" + e.toString() + "\" }";
             }
-        } else {
-            return "{ \"Test error\": \"Not connected to Redis\" }";
         }
+        return "{ \"Test error\": \"Something went wrong\" }";
     }
 }
 
