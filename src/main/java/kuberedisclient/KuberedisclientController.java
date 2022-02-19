@@ -24,40 +24,34 @@ public class KuberedisclientController {
 
     @Inject
     RedisClient redisClient;
-
-    //RedisClusterClient redisClusterClient;
-    //RedisAdvancedClusterCommands<String, String> sync;
-
-    /*
-    RedisCommands sync;
+    StatefulRedisConnection<String, String> connection;
 
     public KuberedisclientController() {
         try  {
             System.out.println("Connecting to redis cluster ..");
-            //StatefulRedisClusterConnection<String, String> connection = redisClusterClient.connect();
-            //RedisAdvancedClusterCommands<String, String> sync = connection.sync();
-            StatefulRedisConnection<String, String> connection = redisClient.connect();
-            sync = connection.sync();
+            connection = redisClient.connect();
             System.out.println("Succesfully connected.");
         } catch (Exception e) {
             System.out.println("Failed.");
             System.out.println(e.toString());
         }
     }
-     */
 
     @Get("/test")
     String test() {
-        try  {
-            StatefulRedisConnection<String, String> connection = redisClient.connect();
-            RedisCommands sync = connection.sync();
-            sync.set("key", "Hello, World!");
-            String value = (String) sync.get("key");
-            System.out.println(value);
-            return "{ \"value\": \"" + value + "\"}";
-        } catch (Exception e) {
-            System.out.println("Test error:" + e.toString());
-            return "{ \"Test error\": \"" + e.toString() + "\" }";
+        if(connection != null) {
+            try {
+                RedisCommands sync = connection.sync();
+                sync.set("key", "Hello, World!");
+                String value = (String) sync.get("key");
+                System.out.println(value);
+                return "{ \"value\": \"" + value + "\"}";
+            } catch (Exception e) {
+                System.out.println("Test error:" + e.toString());
+                return "{ \"Test error\": \"" + e.toString() + "\" }";
+            }
+        } else {
+            return "{ \"Test error\": \"Not connected to Redis\" }";
         }
     }
 }
